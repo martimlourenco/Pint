@@ -29,11 +29,11 @@ const User = sequelize.define('User', {
   },
   user_password: {
     type: DataTypes.STRING(255),
-    allowNull: true, // Permitir NULL para usuários do Google
+    allowNull: true, 
   },
   email_confirmed: {
     type: DataTypes.BOOLEAN,
-    defaultValue: true, // Considerar confirmado para usuários do Google
+    defaultValue: true, 
   },
   NIF: {
     type: Sequelize.INTEGER,
@@ -53,7 +53,8 @@ const User = sequelize.define('User', {
   },
   DATAINICIO: {
     type: Sequelize.DATE,
-    allowNull: false
+    allowNull: false,
+    defaultValue: Sequelize.NOW,
   }
 }, {
   tableName: 'users',

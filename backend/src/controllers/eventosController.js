@@ -184,4 +184,25 @@ const deleteEvento = async (req, res) => {
   }
 };
 
-module.exports = { createEvento, listEventos, updateEvento, deleteEvento, eventoDetail, listEventosDisp };
+const listarEventosCriador = async (req, res) => {
+  const { ID_CRIADOR } = req.params;
+
+  try {
+    const eventos = await Eventos.findAll({
+      where: {
+        ID_CRIADOR
+      }
+    });
+
+    if (!eventos.length) {
+      return res.status(404).json({ message: 'Nenhum evento encontrado para este criador.' });
+    }
+
+    res.status(200).json(eventos);
+  } catch (error) {
+    console.error('Erro ao listar eventos do criador:', error);
+    res.status(500).json({ message: 'Erro ao listar eventos do criador.', error: error.message });
+  }
+};
+
+module.exports = { createEvento, listEventos, updateEvento, deleteEvento, eventoDetail, listEventosDisp, listarEventosCriador };

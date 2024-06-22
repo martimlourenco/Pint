@@ -27,6 +27,7 @@
     "passport-google-oauth20": "^2.0.0",
     "pg": "^8.11.5",
     "pg-hstore": "^2.3.4",
+    "react-google-charts": "^4.0.1",
     "sequelize": "^6.37.3",
     "sweetalert": "^2.1.2",
     "sweetalert2": "^11.12.0"

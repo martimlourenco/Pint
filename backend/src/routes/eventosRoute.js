@@ -12,5 +12,6 @@ router.get('/listdisp', eventoRoute.listEventosDisp);
 router.delete('/delete/:id', eventoRoute.deleteEvento);
 router.put('/update/:id', eventoRoute.updateEvento);
 router.get('/get/:id', eventoRoute.eventoDetail);
+router.get('/criador/:ID_CRIADOR/eventos', eventoRoute.listarEventosCriador);
 
 module.exports = router;

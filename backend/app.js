@@ -10,6 +10,8 @@ const forumRoutes = require('./src/routes/forumRoute');
 const albumRoutes = require('./src/routes/albumFotosRoute');
 const userRoutes = require('./src/routes/utilizadorRoute');
 const areaRoutes = require('./src/routes/areaRoute');
+const participantesEventoRoutes = require('./src/routes/participantesEventoRoute');
+const settingsRoutes = require('./src/routes/settingsRoute');
 const session = require('express-session');
 const { SESSION_SECRET, PORT } = require('./src/config');
 const sequelize = require('./src/models/database');
@@ -51,25 +53,54 @@ const upload = multer({ storage: storage });
 const predefinedAreas = [
   { NOME_AREA: 'Gastronomia' },
   { NOME_AREA: 'Desporto' },
-  { NOME_AREA: 'Saude' }
+  { NOME_AREA: 'Saude' },
+  { NOME_AREA: 'Formacao' },
+  { NOME_AREA: 'Habitacao' },
+  { NOME_AREA: 'Transportes' },
+  { NOME_AREA: 'Lazer' }
 ];
+
+const predefinedCentros = [
+  { NOME_CENTRO: 'Centro de Viseu', MORADA: 'VISEU', N_EVENTOS: 0 },
+  { NOME_CENTRO: 'Centro de Porto', MORADA: 'PORTO', N_EVENTOS: 0 },
+  { NOME_CENTRO: 'Centro de Setubal', MORADA: 'SETUBAL', N_EVENTOS: 0 }
+];
+
+
+
 
 const syncDatabase = async () => {
   try {
     await sequelize.authenticate();
     console.log('Conexão estabelecida com sucesso.');
     await sequelize.sync();
+
+    // Sincronizar áreas
     for (const area of predefinedAreas) {
       const [areaInstance, created] = await Area.findOrCreate({
-          where: { NOME_AREA: area.NOME_AREA },
-          defaults: area
+        where: { NOME_AREA: area.NOME_AREA },
+        defaults: area
       });
       if (created) {
-          console.log(`Área "${area.NOME_AREA}" criada`);
+        console.log(`Área "${area.NOME_AREA}" criada`);
       } else {
-          console.log(`Área "${area.NOME_AREA}" já existe`);
+        console.log(`Área "${area.NOME_AREA}" já existe`);
       }
-  }
+    }
+
+    // Sincronizar centros
+    for (const centro of predefinedCentros) {
+      const [centroInstance, created] = await Centro.findOrCreate({
+        where: { NOME_CENTRO: centro.NOME_CENTRO },
+        defaults: centro
+      });
+      if (created) {
+        console.log(`Centro "${centro.NOME_CENTRO}" criado`);
+      } else {
+        console.log(`Centro "${centro.NOME_CENTRO}" já existe`);
+      }
+    }
+
     console.log('Todos os modelos foram sincronizados com sucesso.');
   } catch (error) {
     console.error('Não foi possível conectar ao banco de dados:', error);
@@ -91,6 +122,8 @@ app.use('/forum', forumRoutes);
 app.use('/album', albumRoutes);
 app.use('/user', userRoutes);
 app.use('/area', areaRoutes);
+app.use('/participantesevento', participantesEventoRoutes);
+
 
 syncDatabase();
 

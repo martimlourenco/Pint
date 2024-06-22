@@ -65,10 +65,6 @@ const Eventos = sequelize.define('eventos', {
         type: Sequelize.INTEGER,
         allowNull: false
     },
-    ID_APROVADOR: {
-        type: Sequelize.INTEGER,
-        allowNull: true
-    },
     foto: {
         type: Sequelize.STRING,
         allowNull: true
