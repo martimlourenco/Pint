@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import '../styles/styles.css';
 
 const DetalhesEvento = () => {
     const { id } = useParams();
@@ -40,7 +41,7 @@ const DetalhesEvento = () => {
                 const participantesResponse = await axios.get(`http://localhost:3000/participantesevento/eventos/${id}/participantes`);
                 setParticipantes(participantesResponse.data);
 
-                const isParticipating = participantesResponse.data.some(participante => participante.ID_FUNCIONARIO === userRef.current.ID_FUNCIONARIO);
+                const isParticipating = participantesResponse.data.some(participante => participante.User.ID_FUNCIONARIO === userRef.current.ID_FUNCIONARIO);
                 setParticipando(isParticipating);
             } catch (error) {
                 console.error('Erro ao carregar dados:', error);
@@ -73,6 +74,17 @@ const DetalhesEvento = () => {
         }
     };
 
+    const handleDeleteComentario = async (idForum) => {
+        try {
+            await axios.delete(`http://localhost:3000/forum/delete/${idForum}`);
+
+            setComentarios(prevComentarios => prevComentarios.filter(comentario => comentario.ID_FORUM !== idForum));
+        } catch (error) {
+            console.error('Erro ao apagar comentário:', error);
+            setErro('Erro ao apagar comentário.');
+        }
+    };
+
     const handleParticiparEvento = async () => {
         if (!userRef.current) {
             setErro('Usuário não autenticado.');
@@ -88,7 +100,7 @@ const DetalhesEvento = () => {
             await axios.post('http://localhost:3000/participantesevento/participantes', participanteData);
 
             setParticipando(true);
-            setNParticipantes(prev => prev - 1);
+            setNParticipantes(prev => prev - 1); // Incrementa o número de participantes
             setParticipantes(prev => [...prev, { User: userRef.current }]);
         } catch (error) {
             console.error('Erro ao participar do evento:', error);
@@ -98,7 +110,7 @@ const DetalhesEvento = () => {
 
     const handleDeixarEvento = async () => {
         if (!userRef.current || !evento) {
-            setErro('Usuário não autenticado ou evento não carregado.');
+            setErro('Utilizador não autenticado ou evento não carregado.');
             return;
         }
 
@@ -106,7 +118,7 @@ const DetalhesEvento = () => {
             await axios.delete(`http://localhost:3000/participantesevento/participantesdelete/${userRef.current.ID_FUNCIONARIO}/${evento.ID_EVENTO}`);
 
             setParticipando(false);
-            setNParticipantes(prev => prev + 1);
+            setNParticipantes(prev => prev + 1); // Decrementa o número de participantes
             setParticipantes(prev => prev.filter(participante => participante.User.ID_FUNCIONARIO !== userRef.current.ID_FUNCIONARIO));
         } catch (error) {
             console.error('Erro ao deixar o evento:', error);
@@ -125,14 +137,14 @@ const DetalhesEvento = () => {
                                 <img
                                     src={`http://localhost:3000/${evento.foto}`}
                                     alt={evento.NOME_EVENTO}
-                                    className="img-fluid rounded-start"
-                                    style={{ maxHeight: '400px', objectFit: 'cover', width: '50%' }}
+                                    className="img-fluid rounded-start img-fixa-evento-detalhes"
+                                    
                                 />
                             ) : (
                                 <img
                                     src="/path/to/default/image.jpg"
                                     alt="Imagem padrão"
-                                    className="img-fluid rounded-start"
+                                    className="img-fluid rounded-start "
                                     style={{ maxHeight: '400px', objectFit: 'cover', width: '50%' }}
                                 />
                             )}
@@ -184,9 +196,14 @@ const DetalhesEvento = () => {
                                         <div>
                                             <p className="card-text">{comentario.DESCRICAO}</p>
                                         </div>
-                                        <p className="card-text text-muted" style={{ fontSize: '0.8em' }}>
-                                            {new Date(comentario.DATAFORUM).toLocaleDateString()}
-                                        </p>
+                                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                                            <p className="card-text text-muted" style={{ fontSize: '0.8em', marginRight: '10px' }}>
+                                                {new Date(comentario.DATAFORUM).toLocaleDateString()}
+                                            </p>
+                                            <button className="btn btn-danger btn-sm" onClick={() => handleDeleteComentario(comentario.ID_FORUM)}>
+                                                Apagar
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

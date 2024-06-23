@@ -11,7 +11,7 @@ const LocaisPorArea = ({ idArea }) => {
     const fetchLocais = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:3000/locais/listarea/1`);
+        const response = await axios.get(`http://localhost:3000/locais/listarea/7`);
         setLocais(response.data);
         setErro('');
       } catch (error) {

@@ -21,7 +21,7 @@ const ListarEventos = () => {
             const response = await axios.get('http://localhost:3000/evento/list');
             setEventos(response.data);
         } catch (error) {
-            console.error('Erro ao buscar eventos:', error);
+            console.error('Erro ao procurar eventos:', error);
         }
     };
 

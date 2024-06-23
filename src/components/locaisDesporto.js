@@ -9,12 +9,12 @@ const LocaisPorArea = ({ idArea }) => {
   useEffect(() => {
     const fetchLocais = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/locais/listarea/3`);
+        const response = await axios.get(`http://localhost:3000/locais/listarea/2`);
         setLocais(response.data);
         setErro('');
       } catch (error) {
         console.error('Erro ao procurar locais:', error);
-        setErro('Erro ao procurar locais.');
+        setErro('Erro ao buscar locais.');
       }
     };
 

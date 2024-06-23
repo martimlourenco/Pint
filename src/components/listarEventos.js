@@ -33,7 +33,7 @@ const ListarEventos = () => {
                                 {evento.foto && (
                                     <img
                                         src={`http://localhost:3000/${evento.foto}`}
-                                        className="card-img-top"
+                                        className="card-img-top img-evento"
                                         alt={evento.NOME_EVENTO}
                                     />
                                 )}

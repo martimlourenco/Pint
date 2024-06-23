@@ -37,7 +37,7 @@ const Login = () => {
       });
       sessionStorage.setItem('token', response.data.token); // Alterado para sessionStorage
       Swal.fire('Sucesso', 'Login bem-sucedido!', 'success').then(() => {
-        navigate('/centro/list'); // Redireciona para a página inicial após o login bem-sucedido
+        navigate('/dashboard'); // Redireciona para a página inicial após o login bem-sucedido
       });
     } catch (error) {
       Swal.fire('Erro', 'Erro ao fazer login.', 'error');
@@ -62,7 +62,7 @@ const Login = () => {
       // Salva o token JWT recebido no sessionStorage
       sessionStorage.setItem('token', response.data.token); // Alterado para sessionStorage
       Swal.fire('Sucesso', 'Login com Google bem-sucedido!', 'success').then(() => {
-        navigate('/centro/list');
+        navigate('/dashboard');
       });
     } catch (error) {
       Swal.fire('Erro', 'Erro ao fazer login com Google.', 'error');
@@ -114,9 +114,7 @@ const Login = () => {
               <p className="mt-3 text-center">
                 Não tem uma conta? <Link to="/register">Registrar</Link>
               </p>
-              <p className="text-center">
-                Esqueceu sua senha? <Link to="/forgot-password">Recuperar Senha</Link>
-              </p>
+              
             </div>
           </div>
         </div>

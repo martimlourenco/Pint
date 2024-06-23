@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/styles.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope, faLock, faUser, faIdCard, faHome, faPhone, faCalendar, faBuilding } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faLock, faUser, faIdCard, faHome, faPhone, faBuilding } from '@fortawesome/free-solid-svg-icons';
 
 const Registar = () => {
   const [name, setName] = useState('');
@@ -13,7 +13,6 @@ const Registar = () => {
   const [nif, setNif] = useState('');
   const [morada, setMorada] = useState('');
   const [nTelemovel, setNTelemovel] = useState('');
-  const [dataInicio, setDataInicio] = useState('');
   const [idCentro, setIdCentro] = useState('');
   const [centros, setCentros] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
@@ -49,8 +48,8 @@ const Registar = () => {
       return;
     }
 
-    if (!name || !nif || !dataInicio || !idCentro) {
-      setErrorMessage('Nome, NIF, Data de Início e Centro são obrigatórios.');
+    if (!name || !nif || !idCentro) {
+      setErrorMessage('Nome, NIF e Centro são obrigatórios.');
       return;
     }
 
@@ -62,7 +61,6 @@ const Registar = () => {
         NIF: nif,
         MORADA: morada,
         NTELEMOVEL: nTelemovel,
-        DATAINICIO: dataInicio,
         ID_CENTRO: idCentro,
       });
       setSuccessMessage('Usuário registrado com sucesso!');
@@ -157,19 +155,6 @@ const Registar = () => {
                     id="nTelemovel"
                     value={nTelemovel}
                     onChange={(e) => setNTelemovel(e.target.value)}
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="dataInicio" className="form-label">
-                    <FontAwesomeIcon icon={faCalendar} /> Data de Início:
-                  </label>
-                  <input
-                    type="date"
-                    className="form-control"
-                    id="dataInicio"
-                    value={dataInicio}
-                    onChange={(e) => setDataInicio(e.target.value)}
-                    required
                   />
                 </div>
                 <div className="mb-3">

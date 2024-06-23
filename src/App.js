@@ -17,6 +17,12 @@ import PaginaLocaisSaude from "./routes/PaginaLocaisSaude";
 import PaginaPerfil from "./routes/PaginaPerfil";
 import PaginaGerirUtilizadores from "./routes/PaginaGerirUtilizadores";
 import PaginaDashboard from "./routes/Dashboard";
+import PaginaLocaisDesporto from './routes/PaginaLocaisDesporto';
+import PaginaLocaisLazer from './routes/PaginaLocaisLazer';
+import PaginaLocaisFormacao from './routes/PaginaLocaisFormacao';
+import PaginaLocaisHabitacao from './routes/PaginaLocaisHabitacao';
+import PaginaLocaisTransporte from './routes/PaginaLocaisTransportes';
+
 const PrivateRoute = ({ children }) => {
   const token = sessionStorage.getItem('token'); // Alterado para sessionStorage
   return token ? children : <Navigate to="/login" />;
@@ -128,6 +134,14 @@ function App() {
             }
           />
           <Route
+            path="/locais/listarea/2"
+            element={
+              <PrivateRoute>
+                <PaginaLocaisDesporto />
+              </PrivateRoute>
+            }
+          />
+          <Route
             path="/locais/listarea/3"
             element={
               <PrivateRoute>
@@ -135,8 +149,39 @@ function App() {
               </PrivateRoute>
             }
           />
-          
-          <Route path="/" element={token ? <PaginaListarCentros /> : <Navigate to="/login" />} />
+          <Route
+            path="/locais/listarea/4"
+            element={
+              <PrivateRoute>
+                <PaginaLocaisFormacao />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/locais/listarea/5"
+            element={
+              <PrivateRoute>
+                <PaginaLocaisHabitacao />
+              </PrivateRoute>
+            }
+          />
+           <Route
+            path="/locais/listarea/6"
+            element={
+              <PrivateRoute>
+                <PaginaLocaisTransporte />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/locais/listarea/7"
+            element={
+              <PrivateRoute>
+                <PaginaLocaisLazer />
+              </PrivateRoute>
+            }
+          />
+          <Route path="/" element={token ? <PaginaDashboard /> : <Navigate to="/login" />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>

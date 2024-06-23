@@ -38,7 +38,7 @@ const CriarEvento = () => {
         setCentros(centrosResponse.data);
         setUsuarios(usuariosResponse.data);
       } catch (error) {
-        console.error('Erro ao buscar dados:', error);
+        console.error('Erro ao procurar dados:', error);
         MySwal.fire({
           icon: 'error',
           title: 'Erro',
@@ -69,12 +69,12 @@ const CriarEvento = () => {
       }));
     })
     .catch(error => {
-      setError('Erro ao obter os dados do usuário.');
-      console.error('Erro ao obter os dados do usuário:', error);
+      setError('Erro ao obter os dados do utilizador.');
+      console.error('Erro ao obter os dados do utilizador:', error);
       MySwal.fire({
         icon: 'error',
         title: 'Erro',
-        text: 'Erro ao obter os dados do usuário.'
+        text: 'Erro ao obter os dados do utilizador.'
       });
     });
   }, []);
@@ -113,7 +113,7 @@ const CriarEvento = () => {
         title: 'Sucesso',
         text: 'Evento criado com sucesso!'
       });
-      navigate('/eventos');
+      navigate('/evento/manage');
     } catch (error) {
       console.error('Erro ao criar evento:', error);
       MySwal.fire({

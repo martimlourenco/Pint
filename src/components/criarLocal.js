@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+import MySwal from 'sweetalert2';
+
 const AddLocal = () => {
     const [localData, setLocalData] = useState({
         ID_AREA: '',
@@ -18,7 +20,7 @@ const AddLocal = () => {
                 const response = await axios.get('http://localhost:3000/area/list');
                 setAreas(response.data);
             } catch (error) {
-                console.error('Erro ao buscar áreas:', error);
+                console.error('Erro ao procurar áreas:', error);
                 setError('Erro ao carregar áreas.');
             }
         };
@@ -59,7 +61,11 @@ const AddLocal = () => {
                 }
             });
             console.log('Local adicionado:', response.data);
-            // Limpa o formulário após o envio
+            MySwal.fire({
+                icon: 'success',
+                title: 'Sucesso',
+                text: 'Local criado com sucesso!'
+              });
             setLocalData({
                 ID_AREA: '',
                 DESIGNACAO_LOCAL: '',
@@ -132,6 +138,8 @@ const AddLocal = () => {
                                 value={localData.REVIEW}
                                 onChange={handleChange}
                                 className="form-control"
+                                min="0"
+                                max="5"
                             />
                         </div>
                         <div className="form-group">

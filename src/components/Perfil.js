@@ -15,7 +15,8 @@ const Perfil = () => {
     MORADA: '',
     NTELEMOVEL: ''
   });
-  const [eventos, setEventos] = useState([]);
+  const [eventosCriados, setEventosCriados] = useState([]);
+  const [eventosInscritos, setEventosInscritos] = useState([]);
 
   useEffect(() => {
     const token = sessionStorage.getItem('token');
@@ -33,28 +34,47 @@ const Perfil = () => {
     .then(response => {
       setUser(response.data);
       setFormData(response.data);
-      loadEventos(response.data.ID_FUNCIONARIO);
+      loadEventosCriados(response.data.ID_FUNCIONARIO);
+      loadEventosInscritos(response.data.ID_FUNCIONARIO);
     })
     .catch(error => {
-      setError('Erro ao obter os dados do usuário.');
-      console.error('Erro ao obter os dados do usuário:', error);
+      setError('Erro ao obter os dados do utilizador.');
+      console.error('Erro ao obter os dados do utilizador:', error);
     });
   }, []);
 
-  const loadEventos = (userId) => {
+  const loadEventosCriados = (userId) => {
+    axios.get(`http://localhost:3000/evento/criador/eventos/${userId}`, {
+      headers: {
+        'x-auth-token': sessionStorage.getItem('token')
+      }
+    })
+    .then(response => {
+      const eventos = response.data || []; 
+      console.log('Eventos criados:', eventos);
+      setEventosCriados(eventos);
+    })
+    .catch(error => {
+      console.error('Erro ao obter os eventos criados pelo utilizador:', error);
+      setError('Erro ao obter os eventos criados pelo utilizador.');
+    });
+  };
+
+  const loadEventosInscritos = (userId) => {
     axios.get(`http://localhost:3000/participantesevento/funcionario/${userId}/eventos`, {
       headers: {
         'x-auth-token': sessionStorage.getItem('token')
       }
     })
-      .then(response => {
-        console.log('Eventos:', response.data); 
-        setEventos(response.data);
-      })
-      .catch(error => {
-        console.error('Erro ao obter os eventos do usuário:', error);
-        setError('Erro ao obter os eventos do usuário.');
-      });
+    .then(response => {
+      const eventos = response.data || []; // Garantir que eventos seja um array
+      console.log('Eventos inscritos:', eventos);
+      setEventosInscritos(eventos);
+    })
+    .catch(error => {
+      console.error('Erro ao obter os eventos inscritos pelo utilizador:', error);
+      setError('Erro ao obter os eventos inscritos pelo utilizador.');
+    });
   };
 
   const handleChange = (e) => {
@@ -75,8 +95,8 @@ const Perfil = () => {
       setEditMode(false);
     })
     .catch(error => {
-      setError(`Erro ao atualizar os dados do usuário: ${error.response ? error.response.data.message : error.message}`);
-      console.error('Erro ao atualizar os dados do usuário:', error);
+      setError(`Erro ao atualizar os dados do utilizador: ${error.response ? error.response.data.message : error.message}`);
+      console.error('Erro ao atualizar os dados do utilizador:', error);
     });
   };
 
@@ -138,12 +158,28 @@ const Perfil = () => {
         <div className="card-footer">
           <h3 className="text-center"><FontAwesomeIcon icon={faCalendarAlt} /> Eventos Inscritos</h3>
           <ul className="list-group list-group-flush">
-            {eventos.length > 0 ? (
-              eventos.map(evento => (
-                <li key={evento.evento.ID_CRIADOR} className="list-group-item">
+            {eventosInscritos.length > 0 ? (
+              eventosInscritos.map(evento => (
+                <li key={evento.evento.ID_EVENTO} className="list-group-item">
                   <h5>{evento.evento.NOME_EVENTO}</h5>
                   <p><strong>Data:</strong> {new Date(evento.evento.DATA_EVENTO).toLocaleDateString()}</p>
                   <p><strong>Localização:</strong> {evento.evento.LOCALIZACAO}</p>
+                </li>
+              ))
+            ) : (
+              <li className="list-group-item">Nenhum evento encontrado.</li>
+            )}
+          </ul>
+        </div>
+        <div className="card-footer">
+          <h3 className="text-center"><FontAwesomeIcon icon={faCalendarAlt} /> Eventos Criados</h3>
+          <ul className="list-group list-group-flush">
+            {eventosCriados.length > 0 ? (
+              eventosCriados.map(evento => (
+                <li key={evento.ID_EVENTO} className="list-group-item">
+                  <h5>{evento.NOME_EVENTO}</h5>
+                  <p><strong>Data:</strong> {new Date(evento.DATA_EVENTO).toLocaleDateString()}</p>
+                  <p><strong>Localização:</strong> {evento.LOCALIZACAO}</p>
                 </li>
               ))
             ) : (

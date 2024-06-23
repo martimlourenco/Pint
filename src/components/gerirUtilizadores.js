@@ -46,8 +46,8 @@ const Utilizadores = () => {
       setUsers(users.filter(user => user.user_id !== userId));
     })
     .catch(error => {
-      setError('Erro ao apagar o usuário.');
-      console.error('Erro ao apagar o usuário:', error);
+      setError('Erro ao apagar o utilizador.');
+      console.error('Erro ao apagar o utilizador:', error);
     });
   };
 

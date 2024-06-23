@@ -11,6 +11,7 @@ const Navbar = () => {
     sessionStorage.removeItem('token'); // Mudando para sessionStorage
     console.log('Token after removal:', sessionStorage.getItem('token')); // Deve ser null
     navigate('/login');
+    window.location.reload();
   };
 
   return (

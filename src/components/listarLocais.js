@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import '@fortawesome/fontawesome-free/css/all.css';
+import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 
 const ListarLocais = () => {
   const [locais, setLocais] = useState([]);
@@ -18,7 +19,7 @@ const ListarLocais = () => {
       const response = await axios.get('http://localhost:3000/locais/list');
       setLocais(response.data);
     } catch (error) {
-      console.error('Erro ao buscar locais:', error);
+      console.error('Erro ao encontrar locais:', error);
     }
   };
 
@@ -56,6 +57,20 @@ const ListarLocais = () => {
     });
   };
 
+  const renderStars = (rating) => {
+    const fullStars = Math.floor(rating);
+    const halfStars = rating % 1 >= 0.5 ? 1 : 0;
+    const emptyStars = 5 - fullStars - halfStars;
+
+    return (
+      <>
+        {[...Array(fullStars)].map((_, i) => <FaStar key={`full-${i}`} color="gold" />)}
+        {[...Array(halfStars)].map((_, i) => <FaStarHalfAlt key={`half-${i}`} color="gold" />)}
+        {[...Array(emptyStars)].map((_, i) => <FaRegStar key={`empty-${i}`} color="gold" />)}
+      </>
+    );
+  };
+
   return (
     <div className="container mt-4">
       <h1>Lista de Locais</h1>
@@ -67,7 +82,7 @@ const ListarLocais = () => {
                 {local.fotoUrl && (
                   <img
                     src={local.fotoUrl}
-                    className="card-img-top"
+                    className="card-img-top img-fixa-locais-lista"
                     alt={local.DESIGNACAO_LOCAL}
                   />
                 )}
@@ -77,7 +92,7 @@ const ListarLocais = () => {
                 <p className="card-text flex-grow-1">{local.LOCALIZACAO}</p>
                 {local.REVIEW && (
                   <p className="card-text">
-                    <small className="text-muted">Avaliação: {local.REVIEW}</small>
+                    <small className="text-muted">Avaliação: {renderStars(local.REVIEW)}</small>
                   </p>
                 )}
                 {local.area && (
