@@ -60,7 +60,7 @@ const DetalhesLocal = () => {
         {local.foto && (
           <img
             src={`http://localhost:3000/uploads/${local.foto}`}
-            className="card-img-top img-local-detalhes" // Aplicando a nova classe CSS
+            className="card-img-top img-local-detalhes" 
             alt={local.DESIGNACAO_LOCAL}
           />
         )}

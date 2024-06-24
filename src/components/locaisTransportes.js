@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
+
 
 const LocaisPorArea = ({ idArea }) => {
   const [locais, setLocais] = useState([]);
@@ -14,12 +16,26 @@ const LocaisPorArea = ({ idArea }) => {
         setErro('');
       } catch (error) {
         console.error('Erro ao procurar locais:', error);
-        setErro('Erro ao procurar locais.');
+        setErro('Não há locais com esta àrea.');
       }
     };
 
     fetchLocais();
   }, [idArea]);
+
+  const renderStars = (rating) => {
+    const fullStars = Math.floor(rating);
+    const halfStars = rating % 1 >= 0.5 ? 1 : 0;
+    const emptyStars = 5 - fullStars - halfStars;
+
+    return (
+      <>
+        {[...Array(fullStars)].map((_, i) => <FaStar key={`full-${i}`} color="gold" />)}
+        {[...Array(halfStars)].map((_, i) => <FaStarHalfAlt key={`half-${i}`} color="gold" />)}
+        {[...Array(emptyStars)].map((_, i) => <FaRegStar key={`empty-${i}`} color="gold" />)}
+      </>
+    );
+  };
 
   if (erro) {
     return (
@@ -49,7 +65,7 @@ const LocaisPorArea = ({ idArea }) => {
             <h5 className="mb-1">{local.DESIGNACAO_LOCAL}</h5>
             <p className="mb-1">{local.LOCALIZACAO}</p>
             {local.REVIEW && (
-              <p className="mb-1"><strong>Avaliação:</strong> {local.REVIEW}</p>
+              <p className="mb-1"><strong>Avaliação:</strong> {renderStars(local.REVIEW)}</p>
             )}
           </Link>
         ))}

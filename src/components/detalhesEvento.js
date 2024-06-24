@@ -67,6 +67,7 @@ const DetalhesEvento = () => {
             const response = await axios.post('http://localhost:3000/forum/create', comentarioData);
 
             setComentarios(prevComentarios => [...prevComentarios, response.data]);
+            window.location.reload();
             setNovoComentario('');
         } catch (error) {
             console.error('Erro ao adicionar comentário:', error);
@@ -100,7 +101,7 @@ const DetalhesEvento = () => {
             await axios.post('http://localhost:3000/participantesevento/participantes', participanteData);
 
             setParticipando(true);
-            setNParticipantes(prev => prev - 1); // Incrementa o número de participantes
+            setNParticipantes(prev => prev - 1); 
             setParticipantes(prev => [...prev, { User: userRef.current }]);
         } catch (error) {
             console.error('Erro ao participar do evento:', error);
@@ -118,7 +119,7 @@ const DetalhesEvento = () => {
             await axios.delete(`http://localhost:3000/participantesevento/participantesdelete/${userRef.current.ID_FUNCIONARIO}/${evento.ID_EVENTO}`);
 
             setParticipando(false);
-            setNParticipantes(prev => prev + 1); // Decrementa o número de participantes
+            setNParticipantes(prev => prev + 1); 
             setParticipantes(prev => prev.filter(participante => participante.User.ID_FUNCIONARIO !== userRef.current.ID_FUNCIONARIO));
         } catch (error) {
             console.error('Erro ao deixar o evento:', error);
@@ -138,7 +139,7 @@ const DetalhesEvento = () => {
                                     src={`http://localhost:3000/${evento.foto}`}
                                     alt={evento.NOME_EVENTO}
                                     className="img-fluid rounded-start img-fixa-evento-detalhes"
-                                    
+
                                 />
                             ) : (
                                 <img
@@ -152,19 +153,19 @@ const DetalhesEvento = () => {
                         <div className="col-md-6">
                             <div className="card-body">
                                 <h2 className="card-title mb-3">{evento.NOME_EVENTO}</h2>
-                                <p className="card-text"><strong>ID:</strong> {evento.ID_EVENTO}</p>
+                                {evento.User && (
+                                    <p className="card-text"><strong>Criador:</strong> {evento.User.user_name}</p>
+                                )}
+                                {evento.centro && (
+                                    <p className="card-text"><strong>Centro:</strong> {evento.centro.NOME_CENTRO}</p>
+                                )}
+                                <p className="card-text"><strong>ID do Evento:</strong> {evento.ID_EVENTO}</p>
                                 <p className="card-text"><strong>Tipo de Evento:</strong> {evento.TIPO_EVENTO}</p>
                                 <p className="card-text"><strong>Data do Evento:</strong> {new Date(evento.DATA_EVENTO).toLocaleDateString()}</p>
                                 <p className="card-text"><strong>Localização:</strong> {evento.LOCALIZACAO}</p>
                                 <p className="card-text"><strong>Tipo de Área:</strong> {evento.TIPO_AREA}</p>
                                 <p className="card-text"><strong>Número de Vagas:</strong> {nParticipantes}</p>
 
-                                {evento.centro && (
-                                    <p className="card-text"><strong>Centro:</strong> {evento.centro.NOME_CENTRO}</p>
-                                )}
-                                {evento.User && (
-                                    <p className="card-text"><strong>Criador:</strong> {evento.User.user_name}</p>
-                                )}
                                 {participando ? (
                                     <button className="btn btn-danger mt-3" onClick={handleDeixarEvento}>
                                         Deixar de Participar
@@ -189,26 +190,30 @@ const DetalhesEvento = () => {
                     <hr style={{ width: '80%', marginLeft: '10%' }}></hr>
                     <h1 className="mt-5 mb-4 text-center">Fórum</h1>
                     <div className="comentarios mt-4">
-                        {comentarios.map((comentario) => (
-                            <div key={comentario.ID_FORUM} className="card mb-3">
-                                <div className="card-body">
-                                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                        <div>
-                                            <p className="card-text">{comentario.DESCRICAO}</p>
-                                        </div>
-                                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                                            <p className="card-text text-muted" style={{ fontSize: '0.8em', marginRight: '10px' }}>
-                                                {new Date(comentario.DATAFORUM).toLocaleDateString()}
-                                            </p>
-                                            <button className="btn btn-danger btn-sm" onClick={() => handleDeleteComentario(comentario.ID_FORUM)}>
-                                                Apagar
-                                            </button>
+                        {comentarios.length > 0 ? (
+                            comentarios.map((comentario) => (
+                                <div key={comentario.ID_FORUM} className="card mb-3">
+                                    <div className="card-body">
+                                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                            <div>
+                                                <p className='card-text'>Utilizador: {comentario.ID_FUNCIONARIO}</p>
+                                                <p className="card-text">{comentario.DESCRICAO}</p>
+                                            </div>
+                                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                <p className="card-text text-muted" style={{ fontSize: '0.8em', marginRight: '10px' }}>
+                                                    {new Date(comentario.DATAFORUM).toLocaleDateString()}
+                                                </p>
+                                                <button className="btn btn-danger btn-sm" onClick={() => handleDeleteComentario(comentario.ID_FORUM)}>
+                                                    Apagar
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
-
+                            ))
+                        ) : (
+                            <p className="text-center">Nenhum comentário encontrado.</p>
+                        )}
                         <div className="input-group">
                             <input
                                 type="text"

@@ -22,6 +22,7 @@ import PaginaLocaisLazer from './routes/PaginaLocaisLazer';
 import PaginaLocaisFormacao from './routes/PaginaLocaisFormacao';
 import PaginaLocaisHabitacao from './routes/PaginaLocaisHabitacao';
 import PaginaLocaisTransporte from './routes/PaginaLocaisTransportes';
+import PaginaEditarLocal from './routes/PaginaEditarLocal';
 
 const PrivateRoute = ({ children }) => {
   const token = sessionStorage.getItem('token'); // Alterado para sessionStorage
@@ -122,6 +123,14 @@ function App() {
             element={
               <PrivateRoute>
                 <PaginaCriarLocal />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/locais/edit/:id"
+            element={
+              <PrivateRoute>
+                <PaginaEditarLocal />
               </PrivateRoute>
             }
           />

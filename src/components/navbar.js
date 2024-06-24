@@ -8,7 +8,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     console.log('Logging out...');
-    sessionStorage.removeItem('token'); // Mudando para sessionStorage
+    sessionStorage.removeItem('token'); 
     console.log('Token after removal:', sessionStorage.getItem('token')); // Deve ser null
     navigate('/login');
     window.location.reload();
@@ -30,23 +30,8 @@ const Navbar = () => {
             <li className="nav-item">
               <Link to="/user/list" className="nav-link active text-secondary fs-6">Gerir Utilizadores</Link>
             </li>
-            <li className="nav-item dropdown">
-              <a className="nav-link dropdown-toggle text-secondary fs-6" href="#" id="centroDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Centro
-              </a>
-              <ul className="dropdown-menu" aria-labelledby="centroDropdown">
-                <li><Link to="/centro/list" className="dropdown-item">Gerir Centros</Link></li>
-              </ul>
-            </li>
-            <li className="nav-item dropdown">
-              <a className="nav-link dropdown-toggle text-secondary fs-6" href="#" id="locaisDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Locais
-              </a>
-              <ul className="dropdown-menu" aria-labelledby="locaisDropdown">
-                <li><Link to="/locais/list" className="dropdown-item">Gerir Locais</Link></li>
-                <li><Link to="/locais/create" className="dropdown-item">Add Locais</Link></li>
-              </ul>
-            </li>
+            <li><Link to="/centro/list" className="nav-link active text-secondary fs-6">Centros</Link></li>
+            <li><Link to="/locais/list" className="nav-link active text-secondary fs-6">Estabelecimentos</Link></li>
             <li className="nav-item dropdown">
               <a className="nav-link dropdown-toggle text-secondary fs-6" href="#" id="eventosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Eventos

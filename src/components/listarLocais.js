@@ -73,7 +73,10 @@ const ListarLocais = () => {
 
   return (
     <div className="container mt-4">
-      <h1>Lista de Locais</h1>
+      <h1>Lista de Estabelecimentos</h1>
+        <Link to={`/locais/create`} className="btn btn-primary" style={{ color: 'white' }}>
+          Adicionar Estabelecimento
+        </Link>
       <div className="row">
         {locais.map((local) => (
           <div className="col-md-3 mt-4" key={local.ID_LOCAL}>
@@ -105,6 +108,9 @@ const ListarLocais = () => {
                 >
                   <i className="fas fa-trash"></i>
                 </button>
+                <Link to={`/locais/edit/${local.ID_LOCAL}`} className="btn btn-warning mt-2" style={{ color: 'white' }}>
+                  Editar Local
+                </Link>
               </div>
             </div>
           </div>

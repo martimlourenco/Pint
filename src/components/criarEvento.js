@@ -23,7 +23,8 @@ const CriarEvento = () => {
     TIPO_AREA: '',
     N_PARTICIPANTSE: '',
     ID_APROVADOR: null,
-    foto: null
+    foto: null,
+    comentario: ''
   });
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -87,6 +88,8 @@ const CriarEvento = () => {
     });
   };
 
+  const dataAtual = new Date().toISOString().split('T')[0];
+
   const handleFileChange = (e) => {
     setFormValues({
       ...formValues,
@@ -103,16 +106,28 @@ const CriarEvento = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:3000/evento/create', formData, {
+      const eventoResponse = await axios.post('http://localhost:3000/evento/create', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
+
+      if (formValues.comentario.trim()) {
+        const comentarioData = {
+          ID_FUNCIONARIO: formValues.ID_CRIADOR,
+          DESCRICAO: formValues.comentario,
+          NEVENTO: eventoResponse.data.ID_EVENTO,
+        };
+
+        await axios.post('http://localhost:3000/forum/create', comentarioData);
+      }
+
       MySwal.fire({
         icon: 'success',
         title: 'Sucesso',
         text: 'Evento criado com sucesso!'
       });
+
       navigate('/evento/manage');
     } catch (error) {
       console.error('Erro ao criar evento:', error);
@@ -183,6 +198,7 @@ const CriarEvento = () => {
             className="form-control"
             value={formValues.DATA_EVENTO}
             onChange={handleInputChange}
+            min={dataAtual}
             required
           />
         </div>
@@ -231,6 +247,17 @@ const CriarEvento = () => {
             name="foto"
             className="form-control"
             onChange={handleFileChange}
+          />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="comentario" className="form-label">Comentário</label>
+          <textarea
+            id="comentario"
+            name="comentario"
+            className="form-control"
+            value={formValues.comentario}
+            onChange={handleInputChange}
           />
         </div>
 
